@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>상하이 10.17–10.19 동선</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EEF2F1; --paper:#FAFBFA; --ink:#17242C; --muted:#5B6A71; --line:#CCD6D6;
+  --river:#B9D2DA; --creek:#CFE0E4; --ghost:#A9B6B8;
+  --sat:#2B58D0; --sun:#B8337F; --mon:#0C7F66;
+  --day:var(--sat);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121A1F; --paper:#18232A; --ink:#E6ECEC; --muted:#9AA9AE; --line:#2C3A42;
+    --river:#27465A; --creek:#223B48; --ghost:#4A5B62;
+    --sat:#7C9BFF; --sun:#F07BBE; --mon:#43C9A6;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121A1F; --paper:#18232A; --ink:#E6ECEC; --muted:#9AA9AE; --line:#2C3A42;
+  --river:#27465A; --creek:#223B48; --ghost:#4A5B62;
+  --sat:#7C9BFF; --sun:#F07BBE; --mon:#43C9A6;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+header h1{font-family:Hahmlet,"Nanum Myeongjo",serif;font-weight:700;font-size:clamp(30px,5vw,48px);line-height:1.1;margin:0 0 10px;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);max-width:62ch}
+header p strong{color:var(--ink);font-weight:500}
+
+.tabs{display:flex;gap:8px;margin:26px 0 18px;flex-wrap:wrap}
+.tabs button{font:inherit;cursor:pointer;background:transparent;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:999px;padding:8px 18px 8px 14px;display:flex;align-items:baseline;gap:8px}
+.tabs button .d{font-family:Hahmlet,serif;font-weight:700;font-size:20px}
+.tabs button .w{color:var(--muted);font-size:13px}
+.tabs button[aria-selected="true"]{border-color:var(--day);background:var(--day);color:#fff}
+.tabs button[aria-selected="true"] .w{color:rgba(255,255,255,.85)}
+.tabs button:focus-visible,.stop:focus-visible{outline:2px solid var(--day);outline-offset:3px}
+
+.daytheme{margin:0 0 20px;color:var(--muted);max-width:70ch}
+.daytheme b{color:var(--ink);font-weight:600}
+
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:start}
+.mapbox{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px}
+.mapbox svg{display:block;width:100%;height:auto}
+.mapnote{font-size:12.5px;color:var(--muted);margin:6px 6px 2px}
+
+ol.stops{list-style:none;margin:0;padding:0;position:relative}
+.stop{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line);cursor:pointer;outline:none}
+.stop:first-child{border-top:none;padding-top:4px}
+.num{width:32px;height:32px;border-radius:50%;background:var(--day);color:#fff;display:grid;place-items:center;font-weight:600;font-size:14px;margin-top:2px}
+.stop.meal .num{background:var(--paper);color:var(--day);border:2px solid var(--day)}
+.time{font-family:Hahmlet,serif;font-weight:500;color:var(--day);font-size:15px}
+.name{font-weight:600;font-size:17px;line-height:1.35;margin:1px 0 3px}
+.move{font-size:13px;color:var(--muted)}
+.zh{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:15px;font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+.cp{font:inherit;font-family:"IBM Plex Sans KR",sans-serif;font-size:12px;cursor:pointer;background:transparent;color:var(--day);border:1px solid var(--day);border-radius:4px;padding:0 7px;line-height:1.6}
+.cp:focus-visible{outline:2px solid var(--day);outline-offset:2px}
+.zh{flex-wrap:wrap}
+.am{font-family:"IBM Plex Sans KR",sans-serif;font-size:12px;color:#fff;background:var(--day);border-radius:4px;padding:1px 7px;text-decoration:none;line-height:1.6;white-space:nowrap}
+.am:focus-visible{outline:2px solid var(--day);outline-offset:2px}
+#zhlist .am,#held .exl{--day:var(--ink)}
+#zhlist .am,#held .am{margin-left:2px;display:inline-block;margin-top:2px}
+.note{margin:6px 0 0;max-width:62ch}
+.mode{display:inline-block;font-size:12px;font-weight:600;padding:0 6px;border-radius:4px;margin-right:4px;background:var(--line);color:var(--ink)}
+.mode-지하철{background:var(--day);color:#fff}
+.tag{display:inline-block;font-size:12px;border:1px solid var(--day);color:var(--day);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px;font-weight:500}
+.stop.active .num{box-shadow:0 0 0 4px color-mix(in srgb,var(--day) 25%,transparent)}
+
+.exh{margin:10px 0 2px;padding:10px 12px;border-left:3px solid var(--day);background:var(--paper);border-radius:0 8px 8px 0}
+.exh h4{margin:0 0 6px;font-size:13px;color:var(--muted);font-weight:500}
+.exh ul{margin:0;padding:0;list-style:none}
+.exh li{padding:5px 0;border-top:1px dashed var(--line)}
+.exh li:first-child{border-top:none;padding-top:0}
+.exh .t{font-weight:600}
+.exh .dt{font-size:13px;color:var(--muted)}
+.exh .pr{font-size:12px;font-weight:600;color:var(--day);margin-left:4px}
+.exh .x{font-size:13.5px;display:block}
+.exl{font-size:12.5px;color:var(--day);text-decoration:underline;text-underline-offset:2px;display:inline-block;margin-top:2px}
+
+.check{margin-top:48px;border-top:2px solid var(--ink);padding-top:18px}
+.check h2{font-family:Hahmlet,serif;font-size:24px;margin:0 0 12px}
+.check .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px 32px}
+.check h3{font-size:14px;margin:0 0 6px}
+.check ul{margin:0;padding-left:18px;color:var(--muted)}
+.check li{margin:3px 0}
+.check li b{color:var(--ink);font-weight:500}
+.zhl{color:var(--ink);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+#zhlist li{margin:6px 0}
+
+#map .lbl{fill:var(--muted);font-family:inherit}
+#map .lbl-w{fill:var(--muted);font-style:italic}
+@media (max-width:820px){
+  .grid{grid-template-columns:1fr}
+  .mapbox{position:relative;top:0}
+}
+@media (prefers-reduced-motion:no-preference){
+  #route{transition:opacity .25s}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>상하이, 10월 17–19일</h1>
+    <p>숙소 <strong>Jinglai Hotel Bushe</strong>, 난징시루 931번지(南京西路931号) · 2호선 난징시루역 1번 출구. 날짜를 고르면 약도에 그날의 이동 순서가 번호로 표시됩니다.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="날짜 선택"></div>
+  <p class="daytheme" id="theme"></p>
+
+  <div class="grid">
+    <div class="mapbox">
+      <svg id="map" role="img" aria-label="상하이 약도와 동선"></svg>
+      <p class="mapnote">위치 관계만 보여주는 약도입니다. 번호 사이 선은 이동 순서이며 실제 경로가 아닙니다. 흐린 점은 다른 날의 장소, 네모는 숙소, 점선 마름모는 보류한 장소입니다.</p>
+    </div>
+    <ol class="stops" id="stops"></ol>
+  </div>
+
+  <section class="check" id="zhlist">
+    <h2>검색용 중국어 표기</h2>
+    <p class="daytheme">고덕지도나 디디에서는 이 표기로 검색하세요. "고덕지도" 버튼은 상하이로 지정된 검색 결과를 엽니다(앱이 있으면 앱으로). 숙소는 이름보다 주소로 찾는 게 정확합니다.</p>
+    <div class="cols" id="zhcols"></div>
+  </section>
+
+  <section class="check" id="held">
+    <h2>보류한 장소</h2>
+    <div class="cols">
+      <div>
+        <h3>천안천수 (1000 Trees) <span class="zhl" lang="zh-CN">天安千树 · 莫干山路600号</span> <span data-am="trees"></span></h3>
+        <ul>
+          <li>토머스 헤더윅 설계의 산 모양 복합몰. 기둥 1,000개 위에 나무를 심은 계단식 테라스, 옛 푸펑 제분공장 건물 4동 보존.</li>
+          <li><b>10:00–22:00</b>, 밤에 조명. 바로 옆 M50 갤러리 단지는 월요일 휴무가 많음.</li>
+          <li>가는 법: 13호선 장닝루역(江宁路站) 또는 조각공원에서 쑤저우강 따라 서쪽으로 도보 약 20분.</li>
+          <li>보류 이유: 쑤저우강 동쪽 창고 구간과 방향이 반대. 건물이 지형이 되는 사례로 볼 가치는 있으나, 녹색을 장식으로 쓴 쇼핑몰이라는 비판도 있음.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>롱미술관 웨스트번드 <span class="zhl" lang="zh-CN">龙美术馆（西岸馆）</span> <span data-am="long"></span></h3>
+        <ul>
+          <li>석탄 하역 구조물 위에 콘크리트 볼트를 얹은 건물. 탱크 상하이에서 강변 도보 15분.</li>
+          <li>전시: 천스잉(Wallace Chan) 他界之器 ~10/25, 홍색 고전 미술작품전 征途与山河 9/12–2027/2/28. 예약 없이 현장 구매, 월요일 휴관. <a class="exl" href="http://www.thelongmuseum.org/" target="_blank" rel="noopener">전시 링크 →</a></li>
+          <li>보류 이유: 전시가 관심사와 거리가 있음. 웨스트번드 뮤지엄에서 강변 도보 15분.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>탱크 상하이 <span class="zhl" lang="zh-CN">上海油罐艺术中心</span> <span data-am="tank"></span></h3>
+        <ul>
+          <li>항공유 탱크 5개를 연결한 야외 공원과 전시 공간(OPEN 건축). 웨스트번드 뮤지엄에서 강변 도보 5분.</li>
+          <li>보류 이유: 지나가다 건물이 보이면 보는 정도로. 야외 공원은 무료.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="check">
+    <h2>출발 전 확인</h2>
+    <div class="cols">
+      <div>
+        <h3>예약</h3>
+        <ul>
+          <li><b>푸둥미술관</b>: 트립닷컴에서 10/18 오후 구매</li>
+          <li><b>웨스트번드 컴퓨터 예술전</b>: 1층 현장 구매 (트립닷컴 퐁피두 표는 다른 전시)</li>
+          <li><b>프라다 룽자이</b>: 예약 완료, 10/19 10:00–11:00</li>
+          <li><b>Fotografiska</b>: 트립닷컴에서 10/17 오후 구매, 없으면 현장</li>
+          <li><b>PSA</b>: 무료 입장, 특별전은 현장 구매</li>
+        </ul>
+      </div>
+      <div>
+        <h3>결제와 이동</h3>
+        <ul>
+          <li>알리페이에 해외 카드 연결, 디디는 알리페이 안에서 호출</li>
+          <li>호텔 주소 중국어 캡처: 南京西路931号</li>
+          <li>매너 커피 검색명: 国客滨江店</li>
+          <li>지하철은 알리페이 교통 QR(乘车码)을 미리 활성화, 요금 3–10위안</li>
+        </ul>
+      </div>
+      <div>
+        <h3>시간 제약</h3>
+        <ul>
+          <li>와이탄 조명: 일몰 후 약 15분부터 23시까지 (행사 시 변동)</li>
+          <li>PSA 18시 입장 마감, 매너 커피 22시 마감</li>
+          <li>록번드는 10/22 개막 전이라 이번 일정에서 제외</li>
+          <li>출발 1주 전 각 기관 위챗에서 전시 일정 재확인</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ---------- places (approximate lat/lon) ----------
+const P = {
+  airport:  {lat:31.1970, lon:121.4165, name:"훙차오 공항", edge:true, zh:"上海虹桥国际机场 T1航站楼"},
+  hotel:    {lat:31.2290, lon:121.4595, name:"숙소", zh:"南京西路931号"},
+  wbm:      {lat:31.1780, lon:121.4592, zh:"西岸美术馆"},
+  tank:     {lat:31.1838, lon:121.4640, zh:"上海油罐艺术中心"},
+  long:     {lat:31.1722, lon:121.4568, zh:"龙美术馆（西岸馆）"},
+  psa:      {lat:31.2092, lon:121.4922, zh:"上海当代艺术博物馆"},
+  nanxiang: {lat:31.2292, lon:121.4895, zh:"南翔馒头店（豫园店）"},
+  yuyuan:   {lat:31.2258, lon:121.4930, zh:"豫园商城"},
+  kerry:    {lat:31.2245, lon:121.4498, zh:"静安嘉里中心"},
+  prada:    {lat:31.2262, lon:121.4550, zh:"荣宅 陕西北路186号"},
+  tzf:      {lat:31.2085, lon:121.4690, zh:"田子坊"},
+  xtd:      {lat:31.2215, lon:121.4742, zh:"新天地"},
+  ddd:      {lat:31.2360, lon:121.5042, zh:"点都德（正大广场店）"},
+  map:      {lat:31.2422, lon:121.4985, zh:"浦东美术馆"},
+  tower:    {lat:31.2338, lon:121.5068, zh:"朵云书院（上海中心店）"},
+  ljzriver: {lat:31.2352, lon:121.4988, zh:"陆家嘴滨江大道"},
+  ferry:    {lat:31.2318, lon:121.4958, zh:"东昌路轮渡站"},
+  manner:   {lat:31.2500, lon:121.4985, zh:"Manner Coffee（国客滨江店）"},
+  wukang:   {lat:31.2058, lon:121.4368, zh:"武康大楼"},
+  laojishi: {lat:31.2030, lon:121.4400, zh:"老吉士酒家（天平路店）"},
+  tsutaya:  {lat:31.2168, lon:121.4262, zh:"茑屋书店（上生新所店）"},
+  dongxin:  {lat:31.2120, lon:121.4392, zh:"东欣酒家（武康路店）"},
+  anfu:     {lat:31.2098, lon:121.4440, zh:"安福路"},
+  oldsix:   {lat:31.2436, lon:121.4686, zh:"OLD SIX 咖啡 / 八号桥艺术空间（光复路）"},
+  foto:     {lat:31.2442, lon:121.4712, zh:"Fotografiska影像艺术中心 光复路127号"},
+  rhino:    {lat:31.2450, lon:121.4760, zh:"犀牛书店（JK1933）"},
+  shenyuli: {lat:31.2463, lon:121.4832, zh:"慎余里"},
+  zhapu:    {lat:31.2446, lon:121.4882, zh:"乍浦路桥"},
+  sculpt:   {lat:31.2380, lon:121.4645, zh:"静安雕塑公园"},
+  trees:    {lat:31.2440, lon:121.4488, zh:"天安千树 莫干山路600号"},
+  miniso:   {lat:31.2378, lon:121.4845, zh:"MINISO LAND（南京东路店）"},
+};
+
+// ---------- itinerary ----------
+const DAYS = [
+ {id:"sat", d:"17", w:"토", color:"--sat",
+  theme:"<b>숙소 주변과 쑤저우강 창고 구간, 걸어서 도는 날.</b> 도착하자마자 내 작품 설치 상태를 확인하고, 조각공원에서 쑤저우강 동쪽 창고 지대를 따라 와이탄 직전까지 걷습니다. 택시가 거의 필요 없어 입국이 늦어져도 뒤로 밀리기만 합니다.",
+  stops:[
+   {p:"airport", t:"09:45", n:"훙차오 공항 도착", m:"택시 25–30분, 입국·짐 찾기 약 1시간 후", note:"김포발 국제선은 1터미널. 2호선은 2터미널 출발이라 짐이 있으면 택시가 편함. 호출 차량은 전용 승차 구역(网约车)에서."},
+   {p:"hotel", t:"11:30", n:"숙소에 짐 맡기기", m:"체크인은 14시부터"},
+   {p:"kerry", t:"12:00", n:"케리센터 · 내 작품 (첫 확인)", m:"도보 15분, 숙소에서", note:"설치 상태 확인: 밝기, 소리, 작동 시간. 문제가 있으면 주말 중 JISP 측에 연락. 점심은 케리센터 안에서 간단히."},
+   {p:"sculpt", t:"13:30", n:"징안조각공원 · JISP 본전시", m:"도보 20분 또는 택시 10분", museum:true,
+    exh:[{t:"제9회 징안국제조각프로젝트: 空间涌现 Shapes of Becoming", dt:"9/24–12/31", pr:"우선", x:"14개국 33팀, 36점, 28곳. 공원이 핵심, 난징시루와 쑤저우강 징안 구간으로 확장. 빛·소리·디지털 작품, 공원 24시간 개방이라 밤에도 관람. 잔디밭의 'Horizon 新天际' 45세 이하 신작 구역.", u:"https://news.qq.com/rain/a/20260915A06I7L00"},
+         {t:"공원 아트센터 실내전 1기: 塑园", dt:"9/28–10/31", x:"생태 예술, 사람과 자연의 공생.", u:"https://news.qq.com/rain/a/20260915A0961V00"}],
+    note:"공공 공원, 무료."},
+   {p:"oldsix", t:"15:00", n:"Old Six Coffee · 8호교 아트스페이스", m:"도보 15–20분, 북쪽 쑤저우강으로", note:"옛 창고의 작은 카페(좌석 적음, 테이크아웃 추천)와 옆 전시 공간. 젠궈중루의 8호교 창의원구(티엔즈팡 근처)와 이름이 같으니 지도에서 쑤저우강 쪽인지 확인."},
+   {p:"foto", t:"15:30", n:"Fotografiska 상하이", m:"도보 몇 분 · 광푸루 127번지", museum:true,
+    exh:[{t:"로버트 자오 런후이: Trying to Remember a Tree", dt:"~11/6", pr:"우선", x:"나무의 생애를 중심으로 사진, 영상, 감시 카메라 영상, 설치.", u:"https://shanghai.fotografiska.com/en/exhibitions/robert-zhao-renhui"},
+         {t:"탄잉제: Nocturnal Reflections", dt:"~2027/1/10", pr:"우선", x:"이미지 조각, 설치, 영상, 라이트박스. 이미지가 만들어지고 이동하며 의미를 얻는 방식.", u:"https://shanghai.fotografiska.com/en/exhibitions/tan-yingjie"},
+         {t:"황징야오: La Dénivelée", dt:"~12/6", pr:"우선", x:"사진에서 콜라주, 조각, 설치로. 이미지, 물질, 보는 방식의 관계.", u:"https://shanghai.fotografiska.com/en/exhibitions/huang-jingyao"},
+         {t:"토마 소뱅: Beijing Silvermine", dt:"~10/18 (다음 날 폐막)", x:"재활용 센터에서 건진 100만 장 이상의 네거티브로 본 개혁개방기 일상.", u:"https://shanghai.fotografiska.com/en/exhibitions/thomas-sauvin"},
+         {t:"Skate of the Art", dt:"~10/25", x:"스케이트보드 문화와 카메라. 선택.", u:"https://shanghai.fotografiska.com/en/exhibitions/skate-of-the-art"}],
+    note:"1931년 은행 공동 창고(광삼분고)를 고친 공간. 10:30–23:00, 22시 입장 마감, 유료(트립닷컴). 쑤저우강이 보이는 루프톱 라운지. 바로 동쪽이 쓰싱창고. Guan Er Warehouse는 이 일대 옛 창고로 추정되나 위치 미확인."},
+   {p:"rhino", t:"16:45", n:"코뿔소 서점 (犀牛书店) · JK1933", m:"도보 10분, 시장루를 건너 동쪽으로", note:"JK1933 1층 헌책방. 가게 앞 의자에서 커피."},
+   {p:"shenyuli", t:"17:15", n:"선위리 (慎余里)", m:"도보 10분", note:"복원된 스쿠먼 골목. 월요일에 볼 신천지(허물고 재건), 티엔즈팡(주민 공존)과 비교."},
+   {p:"zhapu", t:"17:45", n:"자푸루교 (乍浦路桥)", m:"도보 10분", note:"쑤저우강 산책로 동쪽 끝. 해 진 직후 맞은편 와이탄위안에 조명이 켜짐."},
+   {p:"miniso", t:"18:30", n:"난징둥루 · MINISO LAND", m:"도보 10–15분, 남쪽으로 · 23:30까지", note:"저녁은 난징둥루 주변에서. 모서리 원형 미디어 파사드와 보행가의 스크린 밀도. 주말 저녁이라 붐빔."},
+   {p:"kerry", t:"20:30", n:"케리센터 · 내 작품 (주말 밤)", m:"지하철 2호선 난징둥루역(南京东路站) → 징안사역(静安寺站)", note:"징안사역 출구로 나오면 바로 정안사(静安寺). 조명 켜진 금색 지붕을 보고 케리센터까지 동쪽으로 도보 5분. 주말 밤 조건: 주변 광고 조명 속 밝기·대비, 관객 반응 기록. 이후 숙소까지 도보 15분, 체크인."}
+  ]},
+ {id:"sun", d:"18", w:"일", color:"--sun",
+  theme:"<b>황푸강을 따라 남쪽 미술관에서 푸둥까지.</b> 오전엔 웨스트번드와 PSA, 오후엔 루자쭈이. 저녁엔 와이탄을 푸둥에서, 강 위에서, 북와이탄에서 차례로 봅니다. 웨스트번드 뮤지엄이 11시에 열어 아침은 여유 있게.",
+  stops:[
+   {p:"wbm", t:"11:00", n:"웨스트번드 뮤지엄", m:"택시 25–30분, 숙소 10:30 출발 · 1–1.5시간", museum:true,
+    exh:[{t:"계산하는 천만 세계 (计算万千世界)", dt:"9/24–2027/2/14 · 3전시실", pr:"목적", x:"퐁피두 소장품 중심 약 180점, 7개 장. 1950년대부터 생성 예술, 픽셀 미학, 네트워크 문화, AI까지. 완양, 린커, 루양 등. 생성 예술 부분에 집중.", u:"https://wbmshanghai.com/zh-hans/exhibition/1615-event-computer-worlds"},
+         {t:"Reinventing Landscape: 퐁피두 소장품전 IV (重塑景观)", dt:"~10/18 오늘 폐막 · 1&2전시실", pr:"선택", x:"컴퓨터 예술전 뒤 한산하면 30분. 1층 데스크에서 구매.", u:"https://wbmshanghai.com/zh-hans/exhibition/reinventing-landscape-2025"}],
+    note:"미술관 전체가 화–일 11:00–18:00(17시 입장 마감), 월요일 휴관. 10시에는 열지 않음. 컴퓨터 예술전 먼저, 풍경전은 한산하면. 표: 1층 서비스 데스크 현장 구매(트립닷컴의 퐁피두 표는 풍경전 전용). 점심이 늦으니 미술관 카페에서 간단히. 웨스트번드 아트센터(西岸艺术中心)와 다른 곳."},
+   {p:"psa", t:"12:45", n:"파워스테이션 오브 아트 (PSA)", m:"택시 15분 · 1시간", museum:true,
+    exh:[{t:"리나 보 바르디: 생존의 시학 (The Poetics of Survival)", dt:"7/25–10/25", pr:"우선", x:"중국 첫 리나 보 바르디 전시. 전시 디자인 OPEN 건축(탱크 상하이 설계사). 로비에 SESC 폼페이아 실내 연못 재현, 리넨 커튼의 곡선 공간. 도면, 모형, 사진, 영상.", u:"https://www.smartshanghai.com/event/lina-bo-bardi-the-poetics-of-survival"},
+         {t:"불가리 Kaleidos 万花绮镜", dt:"9/5–10/31 · 2층 · 60위안", x:"보석 300여 점 브랜드 전시. 선택.", u:"https://www.lvmh.com/en/news-lvmh/bvlgari-brings-kaleidos-to-shanghai"}],
+    note:"화–일 11:00–19:00. 입장 무료, 유료 특별전은 1층 데스크에서 여권으로 구매. 주소 苗江路678号."},
+   {p:"ddd", t:"14:15", n:"점도덕 정대광장점 (点都德)", m:"택시 20분", meal:true, note:"정대광장 6층, 루자쭈이역 앞. 홍미창펀(红米肠), 하가우, 꿀 차슈바오. 일요일 점심이라 대기 가능, 도착하자마자 번호표."},
+   {p:"map", t:"15:30", n:"푸둥미술관 (MAP)", m:"도보 10분 · 1–1.5시간", museum:true,
+    exh:[{t:"조르조 모란디: 독백", dt:"6/17–10월 · 1F, 2F · 80위안", pr:"우선", x:"원작 140여 점 포함 200여 점. 반복과 미세한 변주, 작업실 물건과 그림을 나란히.", u:"https://www.museumofartpd.org.cn/exhibition"},
+         {t:"카롤리나 카이세도: 고래의 경의", dt:"~2027/2/21 · 중앙홀 X", x:"실제 혹등고래 두 마리를 실물 크기로 재현한 대형 설치.", u:"https://www.museumofartpd.org.cn/exhibition"},
+         {t:"la Galerie du 19M SHANGHAI", dt:"9/25–11/15 · 3F", x:"샤넬 공방 계열 공예 그룹전. 선택.", u:"https://m.thepaper.cn/newsDetail_forward_33984424"}],
+    note:"장 누벨 건물. 와이탄을 향한 창과 유리 회랑이 핵심. 뒤 일정에 여유가 있으니 천천히, 미술관 카페에서 쉬어도 됨."},
+   {p:"ljzriver", t:"16:50", n:"루자쭈이 빈장대로 강변", m:"도보, MAP 앞 강변", note:"강변을 천천히 걸으며 일몰(17:30 전후)을 기다림. 조명은 17:45 전후 점등. 해 질 녘 강 건너 와이탄 건물 조명이 켜지는 순간. 투광 조명 방식."},
+   {p:"ferry", t:"18:00", n:"페리 (둥창루 → 진링둥루, 도착: 金陵东路轮渡站)", m:"페리 · 2위안, 약 10분", note:"<b>이 노선(东金线)은 18:30이 막배</b>, 붐비니 18시 전후 탑승. 교통 QR(乘车码)·교통카드·현금, 보안 검색 있음. 2층 갑판이 전망 좋음. 놓치면 같은 부두의 푸싱둥루행(东复线, 22시까지) 또는 2호선 루자쭈이역 → 난징둥루역."},
+   {p:"manner", t:"19:00", n:"매너 커피 북와이탄 (国客滨江店)", m:"도보 약 30분, 와이탄 강변 따라 북쪽으로", meal:true, note:"와이탄과 동방명주가 한 프레임에. 22시 마감. 귀가: 12호선 국제여객센터역(国际客运中心站) → 난징시루역(南京西路站), 환승 없음."}
+  ]},
+ {id:"mon", d:"19", w:"월", color:"--mon",
+  theme:"<b>옛 프랑스 조계와 구시가지.</b> 미술관 휴관일이라 건축과 거리 위주로. 서쪽 조계에서 동쪽 예원으로 한 방향으로 이동하고, 같은 골목 주택(스쿠먼)이 상업화된 여러 방식을 비교합니다.",
+  stops:[
+   {p:"kerry", t:"09:15", n:"케리센터 · 내 작품 (평일 오전)", m:"도보 15분, 숙소에서", note:"토요일 낮·밤과 비교 기록."},
+   {p:"prada", t:"10:00", n:"Mi Shang Prada Rong Zhai", m:"도보 10분 · 산시베이루 186번지", meal:true, note:"<b>예약 완료: 10:00–11:00 커피타임</b>. 2층 카페, 커피와 디저트. 1918년 저택, 왕자웨이 협업 공간. 9:50까지 도착."},
+   {p:"wukang", t:"11:15", n:"우캉맨션 (武康大楼)", m:"택시 10분", note:"1924년, 후덱 설계. 외관만 관람, 20–30분. 평일이라 덜 붐빔."},
+   {p:"anfu", t:"11:45", n:"안푸루 (安福路) 산책", m:"도보, 우캉루를 북쪽으로 걷다 안푸루 교차로에서 동쪽으로 · 40–50분", note:"옛 양관 사이 카페, 편집숍, 꽃집이 이어지는 거리. 상하이화극예술센터(上海话剧艺术中心, 안푸루 288번지) 주변까지 걷고 우캉루로 돌아옴. 교차로의 우캉팅(武康庭) 안뜰도 잠깐. 둥신주자는 극장에서 약 350m."},
+   {p:"dongxin", t:"12:40", n:"둥신주자 (东欣酒家)", m:"도보 5–10분, 우캉루를 따라 북쪽으로", meal:true, note:"예약 없이 가는 상하이 본방 요리. 우캉루 98번지, 매일 9:30–21:30, 1인 70–110위안(과거 자료). 양저우식 농어(扬州炝鲈鱼), 향유 드렁허리(响油鳝丝), 파향 갈비(葱香小排). 우캉루 북쪽 구간에 바진 고택, 로미오 발코니. 최근 영업 여부는 고덕지도에서 확인, 안 되면 상생신소 안 식당으로."},
+   {p:"tsutaya", t:"13:50", n:"츠타야 상생신소점", m:"도보 20분 또는 택시 5분", note:"옛 컬럼비아 컨트리클럽. 같은 단지에 후덱 설계로 알려진 쑨커 저택. 프라다 룽자이와 함께 역사 건물을 브랜드 공간으로 바꾼 방식 비교."},
+   {p:"tzf", t:"15:00", n:"티엔즈팡 (田子坊)", m:"택시 15분", note:"주민이 사는 골목에 가게가 들어선 아래로부터의 상업화. 평일이라 주말보다 덜 붐빔."},
+   {p:"xtd", t:"16:00", n:"신천지 (新天地)", m:"도보 20분", note:"허문 뒤 외벽과 골목 형태만 살려 다시 지은 개발사 주도 모델. 파사디즘의 대표 사례."},
+   {p:"nanxiang", t:"17:15", n:"난상만토우디엔 (南翔馒头店)", m:"지하철 10호선 신천지역(新天地站) → 예원역(豫园站), 두 정거장", meal:true, note:"샤오롱바오. 2층 매장 식사가 가성비, 3층은 제철 게살 샤오롱바오. 1층 포장 줄은 피할 것."},
+   {p:"yuyuan", t:"18:00", n:"예원 상가 야경", m:"도보", note:"무료 외부 상가 거리. 내부 정원(유료)은 월요일 휴원이라 해당 없음. 해 진 뒤(18시 전후) 조명이 켜짐. 처마 윤곽을 LED로 그린 조명. 와이탄(투광), 루자쭈이(미디어 파사드)와 다른 세 번째 방식. 귀가: 10호선 예원역 → 난징둥루역, 2호선 환승 → 난징시루역. 다음 날 이른 출발이니 일찍 짐 정리."}
+  ]}
+];
+
+const AMAPQ={"airport": ["虹桥国际机场T1航站楼"], "hotel": ["南京西路931号"], "kerry": ["静安嘉里中心"], "sculpt": ["静安雕塑公园"], "oldsix": ["OLD SIX 咖啡 光复路", "八号桥艺术空间 苏州河"], "foto": ["Fotografiska影像艺术中心"], "rhino": ["犀牛书店 JK1933"], "shenyuli": ["慎余里"], "zhapu": ["乍浦路桥"], "miniso": ["MINISO LAND 南京东路"], "wbm": ["西岸美术馆"], "tank": ["油罐艺术中心"], "psa": ["上海当代艺术博物馆"], "ddd": ["点都德 正大广场"], "map": ["浦东美术馆"], "tower": ["朵云书院 上海中心"], "ljzriver": ["陆家嘴滨江大道"], "ferry": ["东昌路轮渡站", "金陵东路轮渡站"], "manner": ["Manner Coffee 国客滨江店"], "prada": ["荣宅 陕西北路186号"], "wukang": ["武康大楼"], "dongxin": ["东欣酒家 武康路"], "tsutaya": ["茑屋书店 上生新所"], "tzf": ["田子坊"], "xtd": ["新天地"], "nanxiang": ["南翔馒头店 豫园"], "yuyuan": ["豫园商城"], "trees": ["天安千树"], "long": ["龙美术馆 西岸馆"]};
+const amap=q=>`https://uri.amap.com/search?keyword=${encodeURIComponent(q)}&city=310000&src=shanghai-itinerary&callnative=1`;
+const AMAPLBL={oldsix:["Old Six","8호교"],ferry:["출발 부두","도착 부두"]};
+const amapLinks=k=>(AMAPQ[k]||[]).map((q,i,a)=>`<a class="am" href="${amap(q)}" target="_blank" rel="noopener">고덕지도${a.length>1?" · "+((AMAPLBL[k]||[])[i]||(i+1)):""}</a>`).join("");
+// ---------- projection ----------
+const B = {lonMin:121.412, lonMax:121.514, latMin:31.163, latMax:31.256};
+const K = Math.cos(31.21*Math.PI/180);
+const W = 600, H = Math.round(W*(B.latMax-B.latMin)/((B.lonMax-B.lonMin)*K));
+const px = (lat,lon)=>[ (lon-B.lonMin)/(B.lonMax-B.lonMin)*W, (B.latMax-lat)/(B.latMax-B.latMin)*H ];
+const path = pts => pts.map((p,i)=>{const [x,y]=px(p[0],p[1]);return (i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1)}).join(" ");
+
+const HUANGPU = [[31.158,121.452],[31.172,121.462],[31.183,121.470],[31.195,121.480],[31.203,121.4925],[31.212,121.4985],[31.222,121.4990],[31.231,121.4960],[31.238,121.4938],[31.2435,121.4935],[31.2468,121.4990],[31.2472,121.506],[31.2490,121.516]];
+const SUZHOU  = [[31.2440,121.4925],[31.2446,121.482],[31.2426,121.472],[31.2418,121.4655],[31.2432,121.4580],[31.2478,121.4505],[31.2465,121.4420],[31.2405,121.4320],[31.2365,121.4110]];
+
+const svg = document.getElementById("map");
+const NS="http://www.w3.org/2000/svg";
+const el=(tag,attrs={},parent=svg)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent.appendChild(e);return e};
+
+let S=1; // scale factor for current zoom
+function drawBase(vb){
+  svg.innerHTML="";
+  svg.setAttribute("viewBox",vb.join(" "));
+  el("rect",{x:vb[0],y:vb[1],width:vb[2],height:vb[3],fill:"var(--paper)"});
+  el("path",{d:path(SUZHOU),fill:"none",stroke:"var(--creek)","stroke-width":7,"stroke-linecap":"round","stroke-linejoin":"round"});
+  el("path",{d:path(HUANGPU),fill:"none",stroke:"var(--river)","stroke-width":18,"stroke-linecap":"round","stroke-linejoin":"round"});
+  const lbl=(txt,lat,lon,dx=0,dy=0,cls="lbl",anchor="start")=>{const [x,y]=px(lat,lon);const t=el("text",{class:cls,x:x+dx*S,y:y+dy*S,"text-anchor":anchor,"font-size":(cls==="lbl"?11:12)*S});t.textContent=txt;};
+  lbl("황푸강",31.214,121.4990,14,0,"lbl-w");
+  lbl("황푸강",31.186,121.4715,14,0,"lbl-w");
+  lbl("쑤저우강",31.2416,121.4775,0,0,"lbl-w","middle");
+  const [ox,oy]=px(31.2397,121.4998);
+  el("path",{d:`M${ox} ${oy-8*S} L${ox+4.5*S} ${oy+4*S} L${ox-4.5*S} ${oy+4*S} Z`,fill:"none",stroke:"var(--muted)","stroke-width":1.2*S});
+  lbl("동방명주",31.2397,121.4998,9,-6,"lbl","start");
+  lbl("와이탄",31.2330,121.4912,-4,0,"lbl","end");
+  lbl("웨스트번드",31.1765,121.4592,-14,4,"lbl","end");
+}
+
+function viewFor(day){
+  const pts=day.stops.map(s=>P[s.p]).filter(p=>!p.edge).concat([P.hotel]);
+  const xs=pts.map(p=>px(p.lat,p.lon)[0]), ys=pts.map(p=>px(p.lat,p.lon)[1]);
+  let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const pad=Math.max(x1-x0,y1-y0)*0.14+24;
+  x0-=pad;x1+=pad;y0-=pad;y1+=pad;
+  const aspect=1.02; // h/w
+  let w=x1-x0,h=y1-y0;
+  if(h/w<aspect){const nh=w*aspect;y0-=(nh-h)/2;h=nh}else{const nw=h/aspect;x0-=(nw-w)/2;w=nw}
+  return [x0,y0,w,h].map(v=>+v.toFixed(1));
+}
+
+function drawDay(day){
+  const vb=viewFor(day); S=vb[2]/W*1.05;
+  drawBase(vb);
+  const color=`var(${day.color})`;
+  const used=new Set(day.stops.map(s=>s.p));
+  const all=new Set(DAYS.flatMap(d=>d.stops.map(s=>s.p)));
+  all.forEach(k=>{ if(used.has(k)||k==="airport"||k==="hotel")return; const [x,y]=px(P[k].lat,P[k].lon); el("circle",{cx:x,cy:y,r:3.2*S,fill:"var(--ghost)"}); });
+  const [hx,hy]=px(P.hotel.lat,P.hotel.lon);
+  el("rect",{x:hx-6*S,y:hy-6*S,width:12*S,height:12*S,fill:"var(--ink)",rx:2*S});
+  const th=el("text",{class:"lbl",x:hx+10*S,y:hy+14*S,"font-size":11*S}); th.textContent="숙소";
+  // held places
+  [["trees","천안천수 (보류)"],["long","롱미술관 (보류)"],["tank","탱크 상하이 (보류)"]].forEach(([k,label])=>{
+   const [tx,ty]=px(P[k].lat,P[k].lon); const r=7*S;
+   el("path",{d:`M${tx} ${ty-r} L${tx+r} ${ty} L${tx} ${ty+r} L${tx-r} ${ty} Z`,fill:"var(--paper)",stroke:"var(--muted)","stroke-width":1.4*S,"stroke-dasharray":`${2*S} ${2*S}`});
+   const tt=el("text",{class:"lbl",x:tx,y:ty+r+12*S,"text-anchor":"middle","font-size":10.5*S}); tt.textContent=label;});
+  const g=el("g",{id:"route"});
+  const seenCount={};
+  const offs=day.stops.map(s=>{const c=seenCount[s.p]||0; seenCount[s.p]=c+1; return c;});
+  const xy=(p,i)=>{let [x,y]=px(p.lat,p.lon);
+    if(p.edge){x=vb[0]+16*S; y=Math.min(Math.max(y,vb[1]+16*S),vb[1]+vb[3]-16*S);}
+    if(i!==undefined&&offs[i]){x+=17*S*offs[i]; y-=10*S*offs[i];}
+    return [x,y];};
+  const d=day.stops.map((s,i)=>{const [x,y]=xy(P[s.p],i);return (i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1)}).join(" ");
+  el("path",{d,fill:"none",stroke:color,"stroke-width":2.2*S,"stroke-dasharray":`${6*S} ${5*S}`,"stroke-linecap":"round",opacity:.85},g);
+  day.stops.forEach((s,i)=>{
+    const p=P[s.p]; const [x,y]=xy(p,i);
+    const mg=el("g",{class:"mk"},g);
+    el("circle",{cx:x,cy:y,r:10.5*S,"data-r":10.5*S,fill:s.meal?"var(--paper)":color,stroke:color,"stroke-width":2*S},mg);
+    const t=el("text",{x,y:y+4*S,"text-anchor":"middle","font-size":11.5*S,"font-weight":600,fill:s.meal?color:"#fff","font-family":"inherit"},mg);
+    t.textContent=i+1;
+    if(p.edge){const a=el("text",{class:"lbl",x:x+15*S,y:y+4*S,"font-size":11*S},g);a.textContent="← 훙차오 공항 (서쪽 약 12km)";}
+  });
+}
+
+function highlight(i){
+  document.querySelectorAll(".stop").forEach((s,j)=>s.classList.toggle("active",j===i));
+  document.querySelectorAll("#route .mk circle").forEach((c,j)=>{const r=+c.dataset.r;c.setAttribute("r", j===i?r*1.35:r)});
+}
+
+function copyText(t,btn){
+  const done=()=>{btn.textContent="복사됨";setTimeout(()=>btn.textContent="복사",1400)};
+  try{ navigator.clipboard.writeText(t).then(done,()=>fallback()); }catch(e){ fallback(); }
+  function fallback(){ try{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();done();}catch(e){btn.textContent="길게 눌러 복사";} }
+}
+function fmtMove(m){
+  const mm=m.match(/^(지하철|택시|도보|페리)\s*[,·]?\s*/);
+  if(!mm) return m;
+  return `<span class="mode mode-${mm[1]}">${mm[1]}</span>`+m.slice(mm[0].length);
+}
+function render(id){
+  const day=DAYS.find(d=>d.id===id)||DAYS[0];
+  document.documentElement.style.setProperty("--day",`var(${day.color})`);
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===day.id));
+  document.getElementById("theme").innerHTML=day.theme;
+  const ol=document.getElementById("stops"); ol.innerHTML="";
+  day.stops.forEach((s,i)=>{
+    const li=document.createElement("li");
+    li.className="stop"+(s.meal?" meal":""); li.tabIndex=0;
+    let exh="";
+    if(s.exh){
+      exh=`<div class="exh"><h4>이 기간 전시</h4><ul>${s.exh.map(e=>`<li><span class="t">${e.t}</span>${e.pr?`<span class="pr">${e.pr}</span>`:""} <span class="dt">${e.dt}</span><span class="x">${e.x}</span>${e.u?`<a class="exl" href="${e.u}" target="_blank" rel="noopener">전시 링크 →</a>`:""}</li>`).join("")}</ul></div>`;
+    }
+    li.innerHTML=`<div class="num">${i+1}</div><div>
+      <div class="time">${s.t}</div>
+      <div class="name">${s.n}${s.meal?'<span class="tag">식사</span>':""}</div>
+      ${P[s.p].zh?`<div class="zh"><span lang="zh-CN">${P[s.p].zh}</span><button type="button" class="cp" data-zh="${P[s.p].zh}">복사</button>${amapLinks(s.p)}</div>`:""}
+      <div class="move">${fmtMove(s.m)}</div>
+      ${s.note?`<p class="note">${s.note}</p>`:""}${exh}</div>`;
+    const cp=li.querySelector(".cp");
+    if(cp) cp.addEventListener("click",ev=>{ev.stopPropagation();copyText(cp.dataset.zh,cp);});
+    li.addEventListener("mouseenter",()=>highlight(i));
+    li.addEventListener("focus",()=>highlight(i));
+    li.addEventListener("click",()=>highlight(i));
+    ol.appendChild(li);
+  });
+  drawDay(day);
+  try{ history.replaceState(null,"","#"+day.id); }catch(e){}
+}
+
+const tabs=document.querySelector(".tabs");
+DAYS.forEach(d=>{
+  const b=document.createElement("button");
+  b.setAttribute("role","tab"); b.dataset.id=d.id;
+  b.style.setProperty("--day",`var(${d.color})`);
+  b.innerHTML=`<span class="d">10.${d.d}</span><span class="w">${d.w}요일</span>`;
+  b.addEventListener("click",()=>render(d.id));
+  tabs.appendChild(b);
+});
+(function(){
+  const cols=document.getElementById("zhcols");
+  const seen=new Set();
+  DAYS.forEach(d=>{
+    const box=document.createElement("div");
+    let rows="";
+    d.stops.forEach(s=>{ if(seen.has(s.p)||!P[s.p].zh) return; seen.add(s.p);
+      rows+=`<li><b>${s.n.replace(/ \(.*?\)$/,"")}</b><br><span lang="zh-CN" class="zhl">${P[s.p].zh}</span> ${amapLinks(s.p)}</li>`; });
+    box.innerHTML=`<h3>10.${d.d} ${d.w}</h3><ul>${rows}</ul>`;
+    cols.appendChild(box);
+  });
+  const st=document.createElement("div");
+  st.innerHTML=`<h3>지하철역</h3><ul>
+    <li><b>난징시루역 (숙소)</b><br><span lang="zh-CN" class="zhl">南京西路站</span></li>
+    <li><b>징안사역 (케리센터)</b><br><span lang="zh-CN" class="zhl">静安寺站</span></li>
+    <li><b>예원역</b><br><span lang="zh-CN" class="zhl">豫园站</span></li>
+    <li><b>난징둥루역</b><br><span lang="zh-CN" class="zhl">南京东路站</span></li>
+    <li><b>신천지역</b><br><span lang="zh-CN" class="zhl">新天地站</span></li>
+    <li><b>루자쭈이역</b><br><span lang="zh-CN" class="zhl">陆家嘴站</span></li>
+    <li><b>국제여객센터역 (북와이탄)</b><br><span lang="zh-CN" class="zhl">国际客运中心站</span></li>
+    <li><b>교통대학역 (우캉맨션)</b><br><span lang="zh-CN" class="zhl">交通大学站</span></li>
+    <li><b>자연박물관역 (조각공원)</b><br><span lang="zh-CN" class="zhl">自然博物馆站</span></li>
+    </ul>`;
+  cols.appendChild(st);
+})();
+document.querySelectorAll("[data-am]").forEach(s=>s.innerHTML=amapLinks(s.dataset.am));
+render((location.hash||"").slice(1));
+</script>
+</body>
+</html>
