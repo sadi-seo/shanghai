@@ -15,6 +15,7 @@
   --bg:#EEF2F1; --paper:#FAFBFA; --ink:#17242C; --muted:#5B6A71; --line:#CCD6D6;
   --river:#B9D2DA; --creek:#CFE0E4; --ghost:#A9B6B8;
   --sat:#2B58D0; --sun:#B8337F; --mon:#0C7F66;
+  --must:#FFE066; --mustink:#17242C;
   --day:var(--sat);
 }
 @media (prefers-color-scheme:dark){
@@ -22,12 +23,14 @@
     --bg:#121A1F; --paper:#18232A; --ink:#E6ECEC; --muted:#9AA9AE; --line:#2C3A42;
     --river:#27465A; --creek:#223B48; --ghost:#4A5B62;
     --sat:#7C9BFF; --sun:#F07BBE; --mon:#43C9A6;
+    --must:#6E5A0E; --mustink:#FFF4C2;
   }
 }
 :root[data-theme="dark"]{
   --bg:#121A1F; --paper:#18232A; --ink:#E6ECEC; --muted:#9AA9AE; --line:#2C3A42;
   --river:#27465A; --creek:#223B48; --ghost:#4A5B62;
   --sat:#7C9BFF; --sun:#F07BBE; --mon:#43C9A6;
+  --must:#6E5A0E; --mustink:#FFF4C2;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
@@ -48,8 +51,24 @@ header p strong{color:var(--ink);font-weight:500}
 .tabs button[aria-selected="true"] .w{color:rgba(255,255,255,.85)}
 .tabs button:focus-visible,.stop:focus-visible{outline:2px solid var(--day);outline-offset:3px}
 
+.weihao{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:6px;padding:10px 14px;margin:0 0 20px}
+.weihao .wl{flex-basis:100%;font-size:12.5px;color:var(--muted)}
+.weihao .wn{font-family:Hahmlet,serif;font-size:26px;font-weight:600;letter-spacing:.06em}
+.weihao .wz{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;font-size:22px}
+.weihao .wp{font-size:15px;color:var(--ink)}
 .daytheme{margin:0 0 20px;color:var(--muted);max-width:70ch}
 .daytheme b{color:var(--ink);font-weight:600}
+.daytheme{margin-bottom:12px}
+.glance{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.glance li{margin:0}
+.glance button{font:inherit;font-size:13px;line-height:1.35;cursor:pointer;display:inline-flex;align-items:baseline;gap:6px;background:var(--paper);color:var(--ink);border:1px solid var(--day);border-radius:999px;padding:4px 10px;text-align:left}
+.glance button .gt{font-family:Hahmlet,serif;font-weight:500;color:var(--day);font-size:12.5px}
+.glance button.opt{border-style:dashed;color:var(--muted)}
+.glance button.meal{background:color-mix(in srgb,var(--muted) 22%,var(--paper))}
+.glance button:focus-visible{outline:2px solid var(--day);outline-offset:2px}
+.stop.flash{animation:flash 1.2s ease}
+@keyframes flash{0%{background:color-mix(in srgb,var(--day) 18%,transparent)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.stop.flash{animation:none}}
 
 .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:start}
 .mapbox{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px}
@@ -83,6 +102,11 @@ ol.stops{list-style:none;margin:0;padding:0;position:relative}
 .mode{display:inline-block;font-size:12px;font-weight:600;padding:0 6px;border-radius:4px;margin-right:4px;background:var(--line);color:var(--ink)}
 .mode-지하철{background:var(--day);color:#fff}
 .tag{display:inline-block;font-size:12px;border:1px solid var(--day);color:var(--day);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px;font-weight:500}
+.name .mt{background:var(--must);color:var(--mustink);padding:0 4px;border-radius:3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.glance button.must{background:var(--must);color:var(--mustink);font-weight:600}
+.glance button.must .gt{color:var(--mustink)}
+.legend-must{display:inline-block;background:var(--must);color:var(--mustink);padding:0 5px;border-radius:3px;font-weight:600}
+.tag.night{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .stop.active .num{box-shadow:0 0 0 4px color-mix(in srgb,var(--day) 25%,transparent)}
 
 .exh{margin:10px 0 2px;padding:10px 12px;border-left:3px solid var(--day);background:var(--paper);border-radius:0 8px 8px 0}
@@ -124,8 +148,11 @@ ol.stops{list-style:none;margin:0;padding:0;position:relative}
     <p>숙소 <strong>Jinglai Hotel Bushe</strong>, 난징시루 931번지(南京西路931号) · 2호선 난징시루역 1번 출구. 날짜를 고르면 약도에 그날의 이동 순서가 번호로 표시됩니다.</p>
   </header>
 
+  <div class="weihao"><span class="wl">디디 기사가 "尾号多少?" 물으면 · 내 번호 끝 4자리</span><span class="wn">2570</span><span class="wz" lang="zh-CN">二五七零</span><span class="wp">èr wǔ qī líng · 얼 우 치 링</span></div>
   <div class="tabs" role="tablist" aria-label="날짜 선택"></div>
   <p class="daytheme" id="theme"></p>
+  <ol class="glance" id="glance" aria-label="그날 갈 곳 한눈에"></ol>
+  <p class="mapnote" style="margin:-16px 0 24px"><span class="legend-must">노란색</span> 꼭 할 것 · 회색 식사 · 점선 선택. 지치면 선택 → 거리 구경 → 식당 순서로 빼고, 노란색은 마지막까지 남기기.</p>
 
   <div class="grid">
     <div class="mapbox">
@@ -178,7 +205,7 @@ ol.stops{list-style:none;margin:0;padding:0;position:relative}
           <li><b>B · Fotografiska</b> 클라우디아 자구아리비 (브라질) <span class="zhl" lang="zh-CN">《万物生》</span> Flora. <b>10/31까지는 조각공원 매원 회랑(梅园长廊)에 있음.</b></li>
           <li><b>C · 쑤허완 만상천지</b> 박수이 Sui Park (한국) <span class="zhl" lang="zh-CN">《微观宇宙》</span> Microcosm. <b>11/3부터</b>라 이번 여행 때는 없음.</li>
           <li><b>D · 징안공원</b> 레오니드 티슈코프 (러시아) <span class="zhl" lang="zh-CN">《私人月亮》</span> Private Moon, 2003. 정안사 맞은편. (11월부터 토니 크랙 추가)</li>
-          <li><b>E · 징안 케리센터 야외 대형 스크린</b> <b>SEOHYO (한국) <span class="zhl" lang="zh-CN">《潮汐镶嵌：夜澜》</span> Tidal Tessellation: Night Currents, 2026. 내 작품.</b></li>
+          <li><b>E · 징안 케리센터 야외 대형 스크린</b> <b>SEOHYO (한국) <span class="zhl" lang="zh-CN">《潮汐镶嵌：夜澜》</span> Tidal Tessellation: Night Currents, 2026. 내 작품.</b> 매일 08:50부터 21:50까지 매시 50분, 1분씩 하루 14회.</li>
         </ul>
       </div>
     </div>
@@ -261,6 +288,11 @@ const P = {
   yuyuan:   {lat:31.2258, lon:121.4930, zh:"豫园商城"},
   kerry:    {lat:31.2245, lon:121.4498, zh:"静安嘉里中心"},
   prada:    {lat:31.2262, lon:121.4550, zh:"Prada荣宅（陕西北路186号）"},
+  gm:       {lat:31.2185, lon:121.4627, zh:"GENTLE MONSTER HAUS NOWHERE 淮海中路798号"},
+  lv:       {lat:31.2305, lon:121.4640, zh:"路易号 兴业太古汇 南京西路789号"},
+  yilou:    {lat:31.2278, lon:121.4555, zh:"艺楼 南京西路1168号 中信泰富广场5楼516"},
+  wuyi:     {lat:31.2250, lon:121.4292, zh:"SSP 利西路（武夷路一带）"},
+  photowith:{lat:31.2140, lon:121.4555, zh:"PHOTOWITH 襄阳南路278弄1号（永康路口）"},
   tzf:      {lat:31.2085, lon:121.4690, zh:"田子坊"},
   xtd:      {lat:31.2215, lon:121.4742, zh:"新天地"},
   ddd:      {lat:31.2360, lon:121.5042, zh:"点都德（正大广场店）"},
@@ -294,15 +326,17 @@ const DAYS = [
   stops:[
    {p:"airport", tk:{s:"done", t:"예약 완료 · 트립닷컴 공항 픽업, 바우처 캡처"}, t:"09:45", n:"훙차오 공항 도착", m:"트립닷컴 공항 픽업 · 호텔까지 25–30분, 입국·짐 찾기 약 1시간 후", note:"김포발 국제선은 1터미널. 바우처의 만나는 장소와 기사 연락 방법을 미리 확인, 로밍 켜 두기. 혹시 기사를 못 만나면 出租车 표지판의 공식 택시 승강장으로, 기사에게 南京西路931号 보여주기."},
    {p:"hotel", t:"11:30", n:"숙소에 짐 맡기기", m:"체크인은 14시부터"},
-   {p:"kerry", tk:{s:"free", t:"무료 · 공공 공간"}, t:"12:00", n:"케리센터 · 내 작품 (첫 확인)", m:"도보 15분, 숙소에서", note:"설치 상태 확인: 밝기, 소리, 작동 시간. 문제가 있으면 주말 중 JISP 측에 연락. 점심은 케리센터 안에서 간단히."},
-   {p:"sculpt", tk:{s:"free", t:"무료 · 공원 24시간 개방"}, t:"13:30", n:"징안조각공원 · JISP 본전시", m:"도보 20분 또는 택시 10분", museum:true,
+   {p:"lv", tk:{s:"free", t:"무료 · 외관만"}, t:"11:50", n:"루이비통 '路易号' 배 건물 (겉만)", m:"숙소에서 도보 3–5분, 난징시루 동쪽", note:"싱예 타이쿠후이(兴业太古汇) 南京西路789号, 우장루 교차로. 배 모양 건물 외관과 테라스만 보고 12:15까지 케리센터로 출발. 안(전시·카페)은 위챗 'My LV' 예약, 10:00–22:00. 2025년 개관 정보라 현재 운영은 미확인."},
+   {p:"kerry", must:true, tk:{s:"free", t:"무료 · 공공 공간"}, t:"12:30", n:"케리센터 · 내 작품 (첫 확인)", m:"도보 15–20분 · <b>늦어도 12:15 출발</b>", note:"<b>야외 대형 스크린, 매일 08:50–21:50 매시 50분에 1분 상영(하루 14회) → 12:50 회차.</b> 12:30까지 도착해 자리 잡고 촬영 준비. 점심은 일찍 와서 케리센터 안에서 먼저 먹거나, 상영 뒤 간단히. 설치 상태 확인: 밝기, 소리, 앞뒤 광고와의 연결. 문제가 있으면 주말 중 JISP 측에 연락. 13:00쯤 조각공원으로."},
+   {p:"yilou", tk:{s:"walkin", t:"선택 · 상황 보고 결정"}, t:"13:00", n:"艺楼 점심 (선택) · 홍미창펀", m:"케리센터에서 동쪽으로 도보 10분, 숙소 방향", meal:true, note:"중신타이푸광장(CITIC Square) 5층 516호. 홍미창펀(红米肠) 있음. 먹으면 조각공원은 13:45쯤 시작(북쪽으로 도보 15분). 안 가면 케리센터 안에서 간단히."},
+   {p:"sculpt", must:true, tk:{s:"free", t:"무료 · 공원 24시간 개방"}, t:"13:30", n:"징안조각공원 · JISP 본전시", m:"도보 20분 또는 택시 10분", museum:true,
     exh:[{t:"제9회 징안국제조각프로젝트: 空间涌现 Shapes of Becoming", dt:"9/24–12/31", pr:"우선", x:"14개국 33팀, 36점, 28곳. 공원이 핵심, 난징시루와 쑤저우강 징안 구간으로 확장. 빛·소리·디지털 작품, 공원 24시간 개방이라 밤에도 관람. 잔디밭의 'Horizon 新天际' 45세 이하 신작 구역.", u:"https://news.qq.com/rain/a/20260915A06I7L00"},
          {t:"공원 아트센터 실내전 1기: 塑园", dt:"9/28–10/31", x:"생태 예술, 사람과 자연의 공생.", u:"https://news.qq.com/rain/a/20260915A0961V00"}],
     note:"공공 공원, 무료. 1호문으로 들어가 6(린디 리)·아트센터 → 4(중앙 잔디밭) → 1·2 → 남동쪽 8–15 순서. 토니 크랙(2)과 매원 회랑의 클라우디아 자구아리비 《万物生》는 10/31까지라 이번에 공원에서 봄. 7(왕이)·3(梦壳)은 밤 작품. 아래 'JISP 작품 리스트' 참고."},
-   {p:"trees", tk:{s:"free", t:"무료 · 외관과 강변"}, t:"14:30", n:"천안천수 (1000 Trees)", m:"도보 25분(북쪽 4호문으로 나가 서북쪽으로, 약 2km) 또는 택시 10분", note:"토마스 헤더윅 설계. 기둥 1,000개 위에 나무를 심은 산 모양 복합몰, 옛 제분공장 건물 보존. 10:00–22:00. 안은 일반 몰이라 외관과 강변 쪽에서 보는 게 핵심. 주말 오후 사진 찍는 사람 많음. '그린워싱' 비판도 함께 생각해 볼 것."},
+   {p:"trees", tk:{s:"free", t:"무료 · 외관과 강변"}, t:"14:30", n:"천안천수 (1000 Trees)", m:"<b>택시 10분</b> · 디디 출발지 <b>自然博物馆地铁站1号口</b>(4호문 앞) · 걸으면 40–50분(고덕지도 기준)", note:"<b>현장에서 결정.</b> 건너뛰면 조각공원을 더 보고 4호문에서 북쪽으로 도보 10–15분, 바로 Old Six·8호교로. 토마스 헤더윅 설계. 기둥 1,000개 위에 나무를 심은 산 모양 복합몰, 옛 제분공장 건물 보존. 10:00–22:00. 안은 일반 몰이라 외관과 강변 쪽에서 보는 게 핵심. 주말 오후 사진 찍는 사람 많음. '그린워싱' 비판도 함께 생각해 볼 것."},
    {p:"oldsix", tk:{s:"walkin", t:"표 없음 · 카페, 그 자리에서 주문"}, t:"15:05", n:"Old Six Cafeer (老六啤酒) · 지나가며", m:"도보 20분, 쑤저우강 남쪽 강변을 따라 동쪽으로", note:"남쑤저우루 1295번지, 강 남쪽(황푸구). 남쑤허 창의원구 옆. 08:00–02:00. 보이면 테이크아웃만 하고 계속 걷기. 바로 동쪽이 8호교 아트스페이스."},
    {p:"bridge8", tk:{s:"walkin", t:"전시 공간 · 운영시간과 입장료 미확인"}, t:"15:15", n:"8호교 아트스페이스 (선택)", m:"도보 2–3분, 다통루(大统路) 건너 바로 동쪽", note:"No.8 Bridge Art Space Gallery. 남쑤저우루 1247번지 2동, Old Six와 같은 강 남쪽 블록. 지금 무슨 전시가 있는지는 확인하지 못함. 시간 봐서 들르거나 건너뛰기. (젠궈중루의 8호교 창의원구와는 다른 곳.)"},
-   {p:"foto", tk:{s:"buy", t:"미리 구매 · 트립닷컴(Fotografiska Shanghai) 10/17 오후, 없으면 현장 매표소"}, t:"15:30", n:"Fotografiska 상하이", m:"다리 건너 도보 10분 · 강 북쪽 광푸루 127번지 · 시간 맞춰 조절", museum:true,
+   {p:"foto", must:true, tk:{s:"buy", t:"미리 구매 · 트립닷컴(Fotografiska Shanghai) 10/17 오후, 없으면 현장 매표소"}, t:"15:30", n:"Fotografiska 상하이", m:"다리 건너 도보 10분 · 강 북쪽 광푸루 127번지 · 시간 맞춰 조절", museum:true,
     exh:[{t:"로버트 자오 런후이: Trying to Remember a Tree", dt:"~11/6", pr:"우선", x:"나무의 생애를 중심으로 사진, 영상, 감시 카메라 영상, 설치.", u:"https://shanghai.fotografiska.com/en/exhibitions/robert-zhao-renhui"},
          {t:"탄잉제: Nocturnal Reflections", dt:"~2027/1/10", pr:"우선", x:"이미지 조각, 설치, 영상, 라이트박스. 이미지가 만들어지고 이동하며 의미를 얻는 방식.", u:"https://shanghai.fotografiska.com/en/exhibitions/tan-yingjie"},
          {t:"황징야오: La Dénivelée", dt:"~12/6", pr:"우선", x:"사진에서 콜라주, 조각, 설치로. 이미지, 물질, 보는 방식의 관계.", u:"https://shanghai.fotografiska.com/en/exhibitions/huang-jingyao"},
@@ -311,15 +345,15 @@ const DAYS = [
     note:"1931년 은행 공동 창고(광삼분고)를 고친 공간. 10:30–23:00, 22시 입장 마감, 유료(트립닷컴). 쑤저우강이 보이는 루프톱 라운지. 바로 동쪽이 쓰싱창고. Guan Er Warehouse는 이 일대 옛 창고로 추정되나 위치 미확인."},
    {p:"rhino", tk:{s:"free", t:"무료 입장 · 서점"}, t:"16:45", n:"코뿔소 서점 (犀牛书店) · JK1933", m:"도보 10분, 시장루를 건너 동쪽으로", note:"JK1933 1층 헌책방. 가게 앞 의자에서 커피."},
    {p:"shenyuli", tk:{s:"free", t:"무료 · 골목"}, t:"17:15", n:"선위리 (慎余里)", m:"도보 10분", note:"복원된 스쿠먼 골목. 월요일에 볼 신천지(허물고 재건), 티엔즈팡(주민 공존)과 비교."},
-   {p:"zhapu", tk:{s:"free", t:"무료 · 다리와 산책로"}, t:"17:45", n:"자푸루교 (乍浦路桥)", m:"도보 10분", note:"쑤저우강 산책로 동쪽 끝. 해 진 직후 맞은편 와이탄위안에 조명이 켜짐."},
-   {p:"miniso", tk:{s:"free", t:"무료 입장 · 매장"}, t:"18:30", n:"난징둥루 · MINISO LAND", m:"도보 10–15분, 남쪽으로 · 23:30까지", note:"저녁은 난징둥루 주변에서. 모서리 원형 미디어 파사드와 보행가의 스크린 밀도. 주말 저녁이라 붐빔."},
+   {p:"zhapu", night:true, tk:{s:"free", t:"무료 · 다리와 산책로"}, t:"17:45", n:"자푸루교 (乍浦路桥)", m:"도보 10분", note:"쑤저우강 산책로 동쪽 끝. 해 진 직후 맞은편 와이탄위안에 조명이 켜짐."},
+   {p:"miniso", tk:{s:"free", t:"무료 입장 · 매장"}, t:"18:30", n:"난징둥루 · MINISO LAND", m:"도보 10–15분, 남쪽으로 · 23:30까지", meal:true, note:"<b>저녁: 난징둥루를 걷다가 괜찮은 곳에서 간단히</b>, 19:55 케리센터 출발 전까지. 못 고르면 산리오 근처 다후춘 생젠(大壶春, 四川中路136号, 도보 5분, 20–30분이면 충분). 새우 생젠(虾仁)이 있는지 메뉴판에서 虾 찾기. 모서리 원형 미디어 파사드와 보행가의 스크린 밀도. 주말 저녁이라 붐빔."},
    {p:"sanrio", tk:{s:"free", t:"무료 입장 · 매장"}, t:"19:30", n:"산리오 기프트 게이트 (Sanrio Gift Gate)", m:"도보 5분, 난징둥루를 따라 와이탄 쪽으로 · 매일 10:00–22:00 전후", note:"난징둥루 299번지 홍이국제광장(宏伊国际广场) 1층 S-103. 난징둥루역 바로 옆이라 끝나고 그대로 지하철 타면 됨."},
-   {p:"kerry", tk:{s:"free", t:"무료 · 공공 공간"}, t:"20:30", n:"케리센터 · 내 작품 (주말 밤)", m:"지하철 2호선 난징둥루역(南京东路站) → 징안사역(静安寺站)", note:"첫 지하철: 블루투스 켜고 알리페이 검색 上海地铁 → 刷码乘车 → QR을 개찰구에. 징안사역 출구로 나오면 바로 정안사(静安寺). 조명 켜진 금색 지붕을 보고 케리센터까지 동쪽으로 도보 5분. 주말 밤 조건: 주변 광고 조명 속 밝기·대비, 관객 반응 기록. 이후 숙소까지 도보 15분, 체크인."}
+   {p:"kerry", must:true, tk:{s:"free", t:"무료 · 공공 공간"}, t:"20:30", n:"케리센터 · 내 작품 (주말 밤)", m:"지하철 2호선 난징둥루역(南京东路站) → 징안사역(静安寺站), 역까지 도보 포함 약 35분 · <b>늦어도 19:55 산리오 출발</b>", note:"첫 지하철: 블루투스 켜고 알리페이 검색 上海地铁 → 刷码乘车 → QR을 개찰구에. 징안사역 출구로 나오면 바로 정안사(静安寺). 조명 켜진 금색 지붕을 보고 케리센터까지 동쪽으로 도보 5분. <b>20:50 회차 (1분).</b> 20:30까지 도착. 주말 밤 조건: 주변 광고 조명 속 밝기·대비, 관객 반응 기록. 이후 숙소까지 도보 15분, 체크인."}
   ]},
  {id:"sun", d:"18", w:"일", color:"--sun",
   theme:"<b>황푸강을 따라 남쪽 미술관에서 푸둥까지.</b> 오전엔 웨스트번드와 PSA, 오후엔 루자쭈이. 저녁엔 붐비는 와이탄 강변을 피해, 미술관 창에서 와이탄 점등을 보고 택시로 북와이탄에 건너가 야경을 봅니다. 웨스트번드 뮤지엄이 11시에 열어 아침은 여유 있게.",
   stops:[
-   {p:"wbm", tk:{s:"onsite", t:"현장 구매 · 1층 서비스 데스크, 여권 지참. 컴퓨터 예술전과 풍경전은 표가 따로"}, t:"11:00", n:"웨스트번드 뮤지엄", m:"택시 25–30분, 숙소 10:30 출발 · 1–1.5시간", museum:true,
+   {p:"wbm", must:true, tk:{s:"onsite", t:"현장 구매 · 1층 서비스 데스크, 여권 지참. 컴퓨터 예술전과 풍경전은 표가 따로"}, t:"11:00", n:"웨스트번드 뮤지엄", m:"택시 25–30분, 숙소 10:30 출발 · 1–1.5시간", museum:true,
     exh:[{t:"계산하는 천만 세계 (计算万千世界)", dt:"9/24–2027/2/14 · 3전시실", pr:"목적", x:"퐁피두 소장품 중심 약 180점, 7개 장. 1950년대부터 생성 예술, 픽셀 미학, 네트워크 문화, AI까지. 완양, 린커, 루양 등. 생성 예술 부분에 집중.", u:"https://wbmshanghai.com/zh-hans/exhibition/1615-event-computer-worlds"},
          {t:"Reinventing Landscape: 퐁피두 소장품전 IV (重塑景观)", dt:"~10/18 오늘 폐막 · 1&2전시실", pr:"선택", x:"컴퓨터 예술전 뒤 한산하면 30분. 1층 데스크에서 구매.", u:"https://wbmshanghai.com/zh-hans/exhibition/reinventing-landscape-2025"}],
     note:"미술관 전체가 화–일 11:00–18:00(17시 입장 마감), 월요일 휴관. 10시에는 열지 않음. 컴퓨터 예술전 먼저, 풍경전은 한산하면. 표: 1층 서비스 데스크 현장 구매(트립닷컴의 퐁피두 표는 풍경전 전용). 점심이 늦으니 미술관 카페에서 간단히. 웨스트번드 아트센터(西岸艺术中心)와 다른 곳."},
@@ -327,35 +361,40 @@ const DAYS = [
     exh:[{t:"리나 보 바르디: 생존의 시학 (The Poetics of Survival)", dt:"7/25–10/25", pr:"우선", x:"중국 첫 리나 보 바르디 전시. 전시 디자인 OPEN 건축(탱크 상하이 설계사). 로비에 SESC 폼페이아 실내 연못 재현, 리넨 커튼의 곡선 공간. 도면, 모형, 사진, 영상.", u:"https://www.smartshanghai.com/event/lina-bo-bardi-the-poetics-of-survival"},
          {t:"불가리 Kaleidos 万花绮镜", dt:"9/5–10/31 · 2층 · 60위안", x:"보석 300여 점 브랜드 전시. 선택.", u:"https://www.lvmh.com/en/news-lvmh/bvlgari-brings-kaleidos-to-shanghai"}],
     note:"화–일 11:00–19:00. 입장 무료, 유료 특별전은 1층 데스크에서 여권으로 구매. 주소 苗江路678号."},
-   {p:"ddd", tk:{s:"walkin", t:"예약 없음 · 도착하면 입구에서 번호표"}, t:"14:15", n:"점도덕 정대광장점 (点都德)", m:"택시 20분", meal:true, note:"정대광장 6층, 루자쭈이역 앞. 홍미창펀(红米肠), 하가우, 꿀 차슈바오. 일요일 점심이라 대기 가능, 도착하자마자 번호표."},
-   {p:"map", tk:{s:"buy", t:"미리 구매 · 트립닷컴(浦东美术馆) 10/18 오후, 모란디전 포함 표인지 확인"}, t:"15:30", n:"푸둥미술관 (MAP)", m:"도보 10분 · 18:00까지 머물기", museum:true,
+   {p:"ddd", must:true, tk:{s:"walkin", t:"예약 없음 · 도착하면 입구에서 번호표"}, t:"14:15", n:"점도덕 정대광장점 (点都德)", m:"택시 20분", meal:true, note:"정대광장 6층, 루자쭈이역 앞. 홍미창펀(红米肠), 하가우, 꿀 차슈바오. 일요일 점심이라 대기 가능, 도착하자마자 번호표."},
+   {p:"map", must:true, night:true, tk:{s:"buy", t:"미리 구매 · 트립닷컴(浦东美术馆) 10/18 오후, 모란디전 포함 표인지 확인"}, t:"15:30", n:"푸둥미술관 (MAP)", m:"도보 10분 · 18:00까지 머물기", museum:true,
     exh:[{t:"조르조 모란디: 독백", dt:"6/17–10월 · 1F, 2F · 80위안", pr:"우선", x:"원작 140여 점 포함 200여 점. 반복과 미세한 변주, 작업실 물건과 그림을 나란히.", u:"https://www.museumofartpd.org.cn/exhibition"},
          {t:"카롤리나 카이세도: 고래의 경의", dt:"~2027/2/21 · 중앙홀 X", x:"실제 혹등고래 두 마리를 실물 크기로 재현한 대형 설치.", u:"https://www.museumofartpd.org.cn/exhibition"},
          {t:"la Galerie du 19M SHANGHAI", dt:"9/25–11/15 · 3F", x:"샤넬 공방 계열 공예 그룹전. 선택.", u:"https://m.thepaper.cn/newsDetail_forward_33984424"}],
     note:"장 누벨 건물, 매일 10:00–21:00. 관람 후 와이탄을 향한 창과 유리 회랑에서 일몰(17:30 전후)과 <b>17:45쯤 와이탄 건물 점등</b>을 강변 인파 없이 보기. 미술관 카페에서 쉬어도 됨. 원하면 잠깐 앞 강변으로 나가 봐도 됨."},
-   {p:"manner", tk:{s:"walkin", t:"표 없음 · 카페, 그 자리에서 주문"}, t:"18:15", n:"북와이탄 강변 · 매너 커피 (国客滨江店)", m:"택시 10–15분, 디디로 터널(新建路隧道) 건너 북와이탄 직행", meal:true, note:"와이탄 중심을 거치지 않음. 차량이 카페 앞까지 못 들어가니 근처 큰길에서 내려 조금 걷기. 와이탄 건물과 동방명주가 한 프레임에. 카페가 붐비면 커피만 사서 바로 앞 강변 산책로에서, 그쪽이 시야가 더 넓음. 조명은 23시까지, 카페 22시 마감. 귀가: 12호선 국제여객센터역(国际客运中心站) → 난징시루역(南京西路站), 환승 없음. 밤 조각공원에 들를 경우 한중루역(汉中路站)에서 내림."},
+   {p:"manner", must:true, night:true, tk:{s:"walkin", t:"표 없음 · 카페, 그 자리에서 주문"}, t:"18:15", n:"북와이탄 강변 · 매너 커피 (国客滨江店)", m:"택시 10–15분, 디디로 터널(新建路隧道) 건너 북와이탄 직행", meal:true, note:"와이탄 중심을 거치지 않음. 차량이 카페 앞까지 못 들어가니 근처 큰길에서 내려 조금 걷기. 와이탄 건물과 동방명주가 한 프레임에. 카페가 붐비면 커피만 사서 바로 앞 강변 산책로에서, 그쪽이 시야가 더 넓음. 조명은 23시까지, 카페 22시 마감. 귀가: 12호선 국제여객센터역(国际客运中心站) → 난징시루역(南京西路站), 환승 없음. 밤 조각공원에 들를 경우 한중루역(汉中路站)에서 내림."},
    {p:"sculpt", tk:{s:"free", t:"무료 · 공원 24시간 개방"}, t:"19:45", n:"밤의 조각공원 (선택) · JISP 빛 작품", m:"지하철 12호선 국제여객센터역 → 한중루역(汉中路站), 환승 없음 · 내려서 4호문까지 도보 5–10분", note:"빛 작품은 대략 21시까지 점등. 4호문으로 들어가 1(《致橡树》) → 3(《梦壳》) → 7(왕이) → 12(리한웨이) 순서, 6(린디 리)도 밤에는 발광. 남쪽 1·2호문으로 나와 숙소까지 도보 10분. 피곤하면 건너뛰고 난징시루역까지 그대로 타고 귀가."}
   ]},
  {id:"mon", d:"19", w:"월", color:"--mon",
   theme:"<b>옛 프랑스 조계와 구시가지.</b> 미술관 휴관일이라 건축과 거리 위주로. 츠타야(서쪽)에서 우캉루·안푸루·창러루를 걸어 티엔즈팡, 예원(동쪽)으로 한 방향으로 이동하고, 같은 골목 주택(스쿠먼)이 상업화된 여러 방식을 비교합니다.",
   stops:[
-   {p:"kerry", tk:{s:"free", t:"무료 · 공공 공간"}, t:"09:15", n:"케리센터 · 내 작품 (평일 오전)", m:"도보 15분, 숙소에서", note:"토요일 낮·밤과 비교 기록. 길 건너 징안공원(D)에 레오니드 티슈코프 《私人月亮》, 정안사 쪽으로 몇 분."},
-   {p:"prada", tk:{s:"done", t:"예약 완료 · 위챗 미니프로그램 迷上Prada荣宅, 확인 화면 캡처"}, t:"10:00", n:"Mi Shang Prada Rong Zhai", m:"도보 10분 · 산시베이루 186번지", meal:true, note:"<b>예약 완료: 10:00–11:00 커피타임</b>. 2층 카페, 커피와 디저트. 1918년 저택, 왕자웨이 협업 공간. 9:50까지 도착."},
-   {p:"tsutaya", tk:{s:"free", t:"무료 입장 · 서점"}, t:"11:15", n:"츠타야 상생신소점", m:"택시 10분", note:"옛 컬럼비아 컨트리클럽. 같은 단지에 후덱 설계로 알려진 쑨커 저택. 프라다 룽자이와 함께 역사 건물을 브랜드 공간으로 바꾼 방식 비교."},
-   {p:"dongxin", tk:{s:"walkin", t:"예약 없음 · 바로 방문"}, t:"12:15", n:"둥신주자 (东欣酒家)", m:"도보 20분, 우캉루 북쪽 끝", meal:true, note:"예약 없이 가는 상하이 본방 요리. 우캉루 98번지, 매일 9:30–21:30, 1인 70–110위안(과거 자료). 양저우식 농어(扬州炝鲈鱼), 향유 드렁허리(响油鳝丝), 파향 갈비(葱香小排). 식사 후 우캉루를 남쪽으로 걸으며 바진 고택, 로미오 발코니. 최근 영업 여부는 고덕지도에서 확인, 안 되면 상생신소 안 식당으로."},
-   {p:"wukang", tk:{s:"free", t:"무료 · 외관만"}, t:"13:20", n:"우캉맨션 (武康大楼)", m:"도보 10–15분, 우캉루를 따라 남쪽으로", note:"1924년, 후덱 설계. 외관만 관람, 20–30분. 평일이라 덜 붐빔."},
-   {p:"anfu", tk:{s:"free", t:"무료 · 거리"}, t:"13:45", n:"안푸루 (安福路) 산책", m:"도보, 우캉맨션에서 북쪽으로 조금 올라가 안푸루 교차로에서 동쪽으로 · 40분", note:"옛 양관 사이 카페, 편집숍, 꽃집이 이어지는 거리. 상하이화극예술센터(上海话剧艺术中心, 안푸루 288번지) 주변까지 걷고 우캉루로 돌아옴. 교차로의 우캉팅(武康庭) 안뜰도 잠깐. 이후 북쪽 창러루로."},
-   {p:"changle", tk:{s:"free", t:"무료 · 거리"}, t:"14:30", n:"창러루 · 쥐푸창 (长乐路 · 巨富长)", m:"도보 10분, 안푸루 동쪽 끝에서 북쪽으로 · 40–50분", note:"쥐루루·푸민루·창러루가 만나는 일대. 플라타너스 길에 편집숍, 빈티지 가게, 카페. 안푸루가 카페·꽃집 중심이라면 이쪽은 옷과 빈티지가 많음."},
-   {p:"tzf", tk:{s:"free", t:"무료 · 골목"}, t:"15:30", n:"티엔즈팡 (田子坊)", m:"도보 25분, 남동쪽으로", note:"주민이 사는 골목에 가게가 들어선 아래로부터의 상업화. 평일이라 주말보다 덜 붐빔."},
-   {p:"xtd", tk:{s:"free", t:"무료 · 거리"}, t:"16:30", n:"신천지 (新天地) · Polux 프렌치토스트", m:"도보 20분", meal:true, note:"허문 뒤 외벽과 골목 형태만 살려 다시 지은 개발사 주도 모델. 파사디즘의 대표 사례. <b>간식: Polux by Paul Pairet</b>, 신천지 북리 5호(太仓路181弄 新天地北里5号), 매일 10:00–22:00. 시그니처 프렌치토스트와 커피. 예약 권장(+86 21 6333 9897)이지만 평일 오후는 바로 앉을 가능성 높음. 든든한 편이라 다음 난상만토우디엔은 늦추거나 줄이기."},
-   {p:"nanxiang", tk:{s:"walkin", t:"예약 없음 · 줄 서기, 2층 매장 식사"}, t:"17:30", n:"난상만토우디엔 (南翔馒头店)", m:"지하철 10호선 신천지역(新天地站) → 예원역(豫园站), 두 정거장", meal:true, note:"샤오롱바오. 2층 매장 식사가 가성비, 3층은 제철 게살 샤오롱바오. 1층 포장 줄은 피할 것."},
-   {p:"yuyuan", tk:{s:"free", t:"무료 · 외부 상가(내부 정원은 월요일 휴원)"}, t:"18:30", n:"예원 상가 야경", m:"도보", note:"무료 외부 상가 거리. 내부 정원(유료)은 월요일 휴원이라 해당 없음. 해 진 뒤(18시 전후) 조명이 켜짐. 처마 윤곽을 LED로 그린 조명. 와이탄(투광), 루자쭈이(미디어 파사드)와 다른 세 번째 방식. 귀가: 10호선 예원역 → 난징둥루역, 2호선 환승 → 난징시루역. <b>다음 날 10/20 07:00 호텔 픽업(트립닷컴 예약 완료) → 훙차오 T1.</b> 오늘 밤 짐 정리, 가능하면 체크아웃 정산도 미리."}
+   {p:"kerry", must:true, tk:{s:"free", t:"무료 · 공공 공간"}, t:"09:30", n:"케리센터 · 내 작품 (평일 오전)", m:"숙소에서 도보 15분 · <b>늦어도 09:15 숙소 출발</b>", note:"<b>09:50 회차 (1분)</b> 보고 바로 프라다로. 09:51에 끝나니 도보 10분이면 10:01쯤 도착, 10:00–11:00 예약에 문제없음. 토요일 낮·밤과 비교 기록. 길 건너 징안공원(D)에 레오니드 티슈코프 《私人月亮》, 정안사 쪽으로 몇 분."},
+   {p:"prada", must:true, tk:{s:"done", t:"예약 완료 · 위챗 미니프로그램 迷上Prada荣宅, 확인 화면 캡처"}, t:"10:00", n:"Mi Shang Prada Rong Zhai", m:"도보 10분 · 산시베이루 186번지", meal:true, note:"<b>예약 완료: 10:00–11:00 커피타임</b>. 2층 카페, 커피와 디저트. 1918년 저택, 왕자웨이 협업 공간. 9:50까지 도착."},
+   {p:"yilou", tk:{s:"walkin", t:"선택 · 상황 보고 결정"}, t:"11:00", n:"艺楼 점심 (선택) · 홍미창펀", m:"프라다 荣宅에서 도보 5분", meal:true, note:"중신타이푸광장 5층 516호. 여기서 먹으면 둥신 점심은 건너뛰고, 츠타야는 택시로 11:45쯤 도착. 이후 시간은 그대로 따라감."},
+   {p:"tsutaya", must:true, tk:{s:"free", t:"무료 입장 · 서점"}, t:"11:15", n:"츠타야 상생신소점", m:"택시 10분", note:"옛 컬럼비아 컨트리클럽. 같은 단지에 후덱 설계로 알려진 쑨커 저택. 프라다 룽자이와 함께 역사 건물을 브랜드 공간으로 바꾼 방식 비교."},
+   {p:"wuyi", tk:{s:"free", t:"무료 · 거리, 가게"}, t:"12:00", n:"우이루 일대 산책 → SSP", m:"츠타야에서 옌안 고가 건너 북쪽으로 도보 15분", note:"목적지는 리시루(利西路)의 <b>SSP</b>. 가는 길에 싱치톈 공원(星期天公园), All Day Roasting Company(커피), Maison Dongliang, Mario Tsai Studio가 차례로 나오고, SSP 바로 옆에 Sabi 805, 313 mento. 조용한 주거 동네, 40–50분. 이후 택시로 우캉루."},
+   {p:"dongxin", tk:{s:"walkin", t:"예약 없음 · 바로 방문"}, t:"13:00", n:"둥신주자 (东欣酒家)", m:"택시 10–15분, 우캉루 북쪽 끝", meal:true, note:"예약 없이 가는 상하이 본방 요리. 우캉루 98번지, 매일 9:30–21:30, 1인 70–110위안(과거 자료). 양저우식 농어(扬州炝鲈鱼), 향유 드렁허리(响油鳝丝), 파향 갈비(葱香小排). 식사 후 우캉루를 남쪽으로 걸으며 바진 고택, 로미오 발코니. 최근 영업 여부는 고덕지도에서 확인, 안 되면 상생신소 안 식당으로."},
+   {p:"wukang", must:true, tk:{s:"free", t:"무료 · 외관만"}, t:"13:50", n:"우캉맨션 (武康大楼) · Muchan Vintage", m:"도보 10–15분, 우캉루를 따라 남쪽으로", note:"1924년, 후덱 설계. 외관만 관람, 20–30분. 평일이라 덜 붐빔. <b>Muchan Vintage</b>: 우캉루에 있는 빈티지 숍. 우캉루를 걸어 내려오는 길에 들르기. 정확한 번지는 미확인이라 고덕지도 'Muchan' 버튼으로 위치 확인."},
+   {p:"anfu", tk:{s:"free", t:"무료 · 거리"}, t:"14:15", n:"안푸루 (安福路) 산책", m:"도보, 우캉맨션에서 북쪽으로 조금 올라가 안푸루 교차로에서 동쪽으로 · 40분", note:"옛 양관 사이 카페, 편집숍, 꽃집이 이어지는 거리. 상하이화극예술센터(上海话剧艺术中心, 안푸루 288번지) 주변까지 걷고 우캉루로 돌아옴. 교차로의 우캉팅(武康庭) 안뜰도 잠깐. 이후 북쪽 창러루로."},
+   {p:"changle", tk:{s:"free", t:"무료 · 거리"}, t:"15:00", n:"창러루 · 쥐푸창 (长乐路 · 巨富长)", m:"도보 10분, 안푸루 동쪽 끝에서 북쪽으로 · 40분", note:"쥐루루·푸민루·창러루가 만나는 일대. 플라타너스 길에 편집숍, 빈티지 가게, 카페. 안푸루가 카페·꽃집 중심이라면 이쪽은 옷과 빈티지가 많음."},
+   {p:"gm", tk:{s:"free", t:"무료 입장 · 매장"}, t:"15:55", n:"젠틀몬스터 HAUS NOWHERE (지나가며)", m:"도보 15분, 동쪽 화이하이중루로", note:"화이하이중루 798–812번지, 화이하이중루역 2번 출구 근처. 1층 키네틱 거대 얼굴 설치만 보고 나오기, 10–15분. 비 오면 잠깐 피하는 곳으로도."},
+   {p:"photowith", tk:{s:"walkin", t:"선택 · 현장 결제(QR), 199–299위안"}, t:"16:10", n:"PHOTOWITH 셀프 사진관 (선택)", m:"젠틀몬스터에서 남쪽으로 도보 5–10분, 융캉루 입구", note:"샹양난루 278롱 1호(襄阳南路278弄1号), 융캉루(永康路) 쪽. 15분 동안 무제한 셀프 촬영, 사진은 위챗·에어드롭으로 받고 4장 인화. 직원이 영어 가능하다는 후기. 주말은 1–3시간 대기, 평일 오후는 대기 없을 가능성 높음. 하면 티엔즈팡을 짧게."},
+   {p:"tzf", tk:{s:"free", t:"무료 · 골목"}, t:"16:25", n:"티엔즈팡 (田子坊)", m:"도보 15분, 남동쪽으로", note:"주민이 사는 골목에 가게가 들어선 아래로부터의 상업화. 평일이라 주말보다 덜 붐빔."},
+   {p:"xtd", must:true, tk:{s:"free", t:"무료 · 거리"}, t:"17:00", n:"신천지 (新天地) · Polux 프렌치토스트", m:"도보 20분", meal:true, note:"허문 뒤 외벽과 골목 형태만 살려 다시 지은 개발사 주도 모델. 파사디즘의 대표 사례. <b>간식: Polux by Paul Pairet</b>, 신천지 북리 5호(太仓路181弄 新天地北里5号), 매일 10:00–22:00. 시그니처 프렌치토스트와 커피. 예약 권장(+86 21 6333 9897)이지만 평일 오후는 바로 앉을 가능성 높음. 든든한 편이라 다음 난상만토우디엔은 늦추거나 줄이기."},
+   {p:"nanxiang", tk:{s:"walkin", t:"예약 없음 · 줄 서기, 2층 매장 식사"}, t:"18:00", n:"난상만토우디엔 (南翔馒头店)", m:"지하철 10호선 신천지역(新天地站) → 예원역(豫园站), 두 정거장", meal:true, note:"샤오롱바오. 2층 매장 식사가 가성비, 3층은 제철 게살 샤오롱바오. 1층 포장 줄은 피할 것."},
+   {p:"yuyuan", tk:{s:"free", t:"무료 · 외부 상가(내부 정원은 월요일 휴원)"}, t:"19:00", n:"예원 상가 야경", m:"도보", note:"무료 외부 상가 거리. 내부 정원(유료)은 월요일 휴원이라 해당 없음. 해 진 뒤(18시 전후) 조명이 켜짐. 처마 윤곽을 LED로 그린 조명. 와이탄(투광), 루자쭈이(미디어 파사드)와 다른 세 번째 방식. 귀가: 10호선 예원역 → 난징둥루역, 2호선 환승 → 난징시루역. <b>다음 날 10/20 07:00 호텔 픽업(트립닷컴 예약 완료) → 훙차오 T1.</b> 오늘 밤 짐 정리, 가능하면 체크아웃 정산도 미리."},
+   {p:"kerry", tk:{s:"free", t:"선택 · 무료 · 공공 공간"}, t:"20:30", n:"케리센터 · 내 작품 (마지막 밤, 선택)", m:"지하철 예원역 → 난징둥루역, 2호선 환승 → 징안사역, 약 35–40분 · <b>20:50 회차는 늦어도 20:05 예원 출발</b>, 마지막 21:50 회차는 21:05 출발 · 택시면 20분", note:"평일 밤 조건으로 마지막 기록. 토요일 밤과 주변 광고·사람 흐름 비교. 끝나면 숙소까지 도보 15분, 짐 싸기(다음 날 07:00 픽업). 비가 많이 오거나 지치면 건너뛰고 바로 숙소로."}
   ]}
 ];
 
-const AMAPQ={"airport": ["虹桥国际机场T1航站楼"], "hotel": ["南京西路931号"], "kerry": ["静安嘉里中心"], "sculpt": ["静安雕塑公园"], "oldsix": ["老六啤酒 南苏州路1295号"], "bridge8": ["八号桥艺术空间 南苏州路1247号"], "foto": ["Fotografiska影像艺术中心"], "rhino": ["犀牛书店 JK1933"], "shenyuli": ["慎余里"], "zhapu": ["乍浦路桥"], "miniso": ["MINISO LAND 南京东路"], "sanrio": ["三丽鸥 宏伊国际广场", "南京东路299号"], "wbm": ["西岸美术馆"], "tank": ["油罐艺术中心"], "psa": ["上海当代艺术博物馆"], "ddd": ["点都德 正大广场"], "map": ["浦东美术馆"], "tower": ["朵云书院 上海中心"], "ljzriver": ["陆家嘴滨江大道"], "ferry": ["东昌路轮渡站", "金陵东路轮渡站"], "manner": ["Manner Coffee 国客滨江店"], "prada":["Prada荣宅","陕西北路186号"], "wukang": ["武康大楼"], "dongxin": ["东欣酒家 武康路"], "anfu": ["安福路 上海话剧艺术中心"], "changle": ["长乐路 富民路"], "tsutaya": ["茑屋书店 上生新所"], "tzf": ["田子坊"], "xtd": ["新天地", "Polux 新天地北里"], "nanxiang": ["南翔馒头店 豫园"], "yuyuan": ["豫园商城"], "trees": ["天安千树"], "long": ["龙美术馆 西岸馆"]};
+const AMAPQ={"airport": ["虹桥国际机场T1航站楼"], "hotel": ["南京西路931号"], "kerry": ["静安嘉里中心"], "sculpt": ["静安雕塑公园"], "oldsix": ["老六啤酒 南苏州路1295号"], "bridge8": ["八号桥艺术空间 南苏州路1247号"], "foto": ["Fotografiska影像艺术中心"], "rhino": ["犀牛书店 JK1933"], "shenyuli": ["慎余里"], "zhapu": ["乍浦路桥"], "miniso": ["MINISO LAND 南京东路", "大壶春 四川中路"], "sanrio": ["三丽鸥 宏伊国际广场", "南京东路299号"], "wbm": ["西岸美术馆"], "tank": ["油罐艺术中心"], "psa": ["上海当代艺术博物馆"], "ddd": ["点都德 正大广场"], "map": ["浦东美术馆"], "tower": ["朵云书院 上海中心"], "ljzriver": ["陆家嘴滨江大道"], "ferry": ["东昌路轮渡站", "金陵东路轮渡站"], "manner": ["Manner Coffee 国客滨江店"], "prada":["Prada荣宅","陕西北路186号"], "wukang": ["武康大楼", "Muchan vintage 武康路"], "dongxin": ["东欣酒家 武康路"], "anfu": ["安福路 上海话剧艺术中心"], "changle": ["长乐路 富民路"], "tsutaya": ["茑屋书店 上生新所"], "tzf": ["田子坊"], "yilou": ["艺楼", "中信泰富广场"], "photowith": ["PHOTOWITH 襄阳南路", "襄阳南路278弄1号"], "wuyi": ["SSP 利西路", "All Day Roasting Company 武夷路"], "lv": ["路易号 兴业太古汇"], "gm": ["GENTLE MONSTER HAUS NOWHERE"], "xtd": ["新天地", "Polux 新天地北里"], "nanxiang": ["南翔馒头店 豫园"], "yuyuan": ["豫园商城"], "trees": ["天安千树"], "long": ["龙美术馆 西岸馆"]};
 const amap=q=>`https://uri.amap.com/search?keyword=${encodeURIComponent(q)}&city=310000&src=shanghai-itinerary&callnative=1`;
-const AMAPLBL={xtd:["신천지","Polux"],ferry:["출발 부두","도착 부두"],prada:["이름","주소"],sanrio:["이름","주소"]};
+const AMAPLBL={miniso:["MINISO","다후춘"],photowith:["이름","주소"],wuyi:["SSP","커피"],wukang:["우캉맨션","Muchan"],yilou:["이름","주소"],xtd:["신천지","Polux"],ferry:["출발 부두","도착 부두"],prada:["이름","주소"],sanrio:["이름","주소"]};
 const amapLinks=k=>(AMAPQ[k]||[]).map((q,i,a)=>`<a class="am" href="${amap(q)}" target="_blank" rel="noopener">고덕지도${a.length>1?" · "+((AMAPLBL[k]||[])[i]||(i+1)):""}</a>`).join("");
 // ---------- projection ----------
 const B = {lonMin:121.412, lonMax:121.514, latMin:31.163, latMax:31.256};
@@ -456,6 +495,17 @@ function render(id){
   document.documentElement.style.setProperty("--day",`var(${day.color})`);
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===day.id));
   document.getElementById("theme").innerHTML=day.theme;
+  const gl=document.getElementById("glance"); gl.innerHTML="";
+  day.stops.forEach((s,i)=>{
+    const opt=/선택/.test(s.n)||(s.tk&&/^선택/.test(s.tk.t||""));
+    let nm=s.n.split(" · ")[0].replace(/\s*\([^)]*\)\s*/g," ").trim();
+    const li=document.createElement("li");
+    const b=document.createElement("button");
+    b.type="button"; b.className=(opt?"opt ":"")+(s.must?"must":(s.meal?"meal":""));
+    b.innerHTML=`<span class="gt">${s.t}</span><span class="gn">${nm}${opt?" (선택)":""}</span>`;
+    b.addEventListener("click",()=>{const t=document.querySelectorAll("#stops > li")[i]; if(!t) return; t.scrollIntoView({behavior:"smooth",block:"start"}); t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash"); t.focus({preventScroll:true});});
+    li.appendChild(b); gl.appendChild(li);
+  });
   const ol=document.getElementById("stops"); ol.innerHTML="";
   day.stops.forEach((s,i)=>{
     const li=document.createElement("li");
@@ -466,7 +516,7 @@ function render(id){
     }
     li.innerHTML=`<div class="num">${i+1}</div><div>
       <div class="time">${s.t}</div>
-      <div class="name">${s.n}${s.meal?'<span class="tag">식사</span>':""}</div>
+      <div class="name">${s.must?`<span class="mt">${s.n}</span>`:s.n}${s.meal?'<span class="tag">식사</span>':""}${s.night?'<span class="tag night">와이탄 야경 촬영</span>':""}</div>
       ${P[s.p].zh?`<div class="zh"><span lang="zh-CN">${P[s.p].zh}</span><button type="button" class="cp" data-zh="${P[s.p].zh}">복사</button>${amapLinks(s.p)}</div>`:""}
       <div class="move">${fmtMove(s.m)}</div>
       ${s.tk?`<div class="tk tk-${s.tk.s}"><span class="tkb">${TKL[s.tk.s]}</span>${s.tk.t.replace(/^[^·]*·\s*/,"")}</div>`:""}
